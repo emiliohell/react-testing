@@ -1,0 +1,27 @@
+<body>
+    <div id='root'></div>
+    <script src="https://unpkg.com/react@16.12.0/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@16.12.0/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone@7.8.3/babel.js"></script>
+    <!-- <script src="https://unpkg.com/prop-types@15.6.1/prop-types.js"></script> -->
+    <script type='text/babel'>
+
+        function App() {
+            const inputRef = React.useRef()
+            const renders = React.useRef(0)
+
+            const [showHello, setShowHello]
+
+            console.log('hello renders: ', renders.current++)
+
+            return <div>
+                <input ref={inputRef} name='name' />
+                <button onClick={() => { inputRef.current.focus() }}>Focus</button>
+            </div>
+        }
+
+
+        ReactDOM.render(<App />, document.getElementById('root'));
+
+    </script>
+</body>

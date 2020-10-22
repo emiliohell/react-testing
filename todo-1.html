@@ -1,0 +1,49 @@
+<body>
+  <div id="root"></div>
+  <script src="https://unpkg.com/react@16.12.0/umd/react.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.8.3/babel.js"></script>
+  <script src="https://unpkg.com/react-dom@16.12.0/umd/react-dom.development.js"></script>
+  <!-- <script src="https://unpkg.com/prop-types@15.6.1/prop-types.js"></script> -->
+  <script type="text/babel">
+    function App() {
+      const [todo, setTodo] = React.useState([]);
+      const [list, setList] = React.useState([]);
+
+      const handleChange = (event) => setTodo(event.target.value);
+      const addButton = () => setList(list.concat(todo));
+
+      const removeButton = () => { setList(list.splice(2, 1)) }
+        ;
+      // const removeButton = () => setList(list.splice(list.splice(-1, 1)));
+
+      React.useEffect(() => {
+        console.log(list)
+        console.log(todo)
+      }, [list])
+
+
+      // React.useEffect(() => {
+      //   console.log('delete')
+      //   setList(list.splice(1, 1))
+      // }, [list])
+
+      return (
+        <div>
+          <button onClick={removeButton}>Remove</button>
+          <h1>TODO:</h1>
+          <input id="todo" type="text" onChange={handleChange} value={todo} />
+          <button onClick={addButton}>Add</button>
+          <h1>Saved Data:</h1>
+          {list.map((task, index, array) => (
+            <span key={index} className={index}>
+              <h1>{task}</h1>
+              <button className={index} onClick={removeButton}>Remove</button>
+            </span>
+          ))}
+        </div>
+      );
+    }
+
+    ReactDOM.render(<App />, document.getElementById("root"));
+  </script>
+</body>
