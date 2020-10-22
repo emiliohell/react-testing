@@ -3,28 +3,32 @@
     <script src="https://unpkg.com/react@16.12.0/umd/react.development.js"></script>
     <script src="https://unpkg.com/react-dom@16.12.0/umd/react-dom.development.js"></script>
     <script src="https://unpkg.com/@babel/standalone@7.8.3/babel.js"></script>
-    <!-- <script src="https://unpkg.com/prop-types@15.6.1/prop-types.js"></script> -->
     <script type='text/babel'>
 
 
-        function SavedToDo({ toDo, deleteButton, editButton, edit, editSaveButton }) {
+        function SavedToDo({ toDo, deleteButton, editSaveButton, handleChange }) {
+            const [edit2, setEdit2] = React.useState(null)
+
+
+            const editButton2 = () => {
+                setEdit2(<input type='text' onChange={handleChange} ></input>)
+            }
 
             return (
-                <span className='todo'>
+                <div className='todo'>
                     <h2 >{toDo}</h2>
-                    {edit}
+                    {edit2}
                     <button onClick={deleteButton}>Delete</button>
-                    <button onClick={editButton}>Edit</button>
+                    <button onClick={editButton2}>Edit</button>
                     <button onClick={editSaveButton}>Save</button>
-                </span>
+                </div>
             )
         }
 
         function App() {
             const [toDo, setToDo] = React.useState([])
             const [input2, setInput2] = React.useState()
-            const [edit, setEdit] = React.useState(null)
-            const focusEditField = React.useRef()
+            // const [edit, setEdit] = React.useState(null)
             const input = React.useRef();
 
             const handleChange = (e) => {
@@ -40,22 +44,14 @@
                 setToDo(toDo.filter((x, i) => index != i))
             }
 
-            const editButton = () => {
-                setEdit(<input type='text' ref={focusEditField} onChange={handleChange} ></input>)
-            }
+            // const editButton = () => {
+            //     setEdit(<input type='text' onChange={handleChange} ></input>)
+            // }
 
             const editSaveButton = (a, index) => {
-
-                setToDo(toDo.filter((x, i) => index != i).concat(input.current))
-                // setToDo(toDo.filter((x, i) => (index === i) ? (x = input.current) : null))
-                // const newTodo = (...toDo)
-                // setToDo(toDo = (newTodo[index] = input.current))
+                setToDo(toDo.map((x, i, array) => i === index ? array[index] = input.current : x))
+                // setToDo(toDo.filter((x, i, array) => array[index] = input.current))
             }
-
-
-            // React.useEffect(() => {
-            //     (focusEditField.current === undefined) ? null : focusEditField.current.focus()
-            // })
 
             const consoleButton = () => {
                 console.log(toDo)
@@ -67,7 +63,16 @@
                 <h1>Your To Do's :</h1>
                 <input onChange={handleChange} type="text"></input>
                 <button onClick={saveButton}>Save</button>
-                {toDo.length > 0 ? toDo.map((x, i, a) => <SavedToDo toDo={x} key={i} deleteButton={() => deleteButton(x, i)} editSaveButton={() => editSaveButton(x, i)} editButton={editButton} edit={edit} />) : null}
+                {toDo.length > 0 ? toDo.map((x, i, a) =>
+                    <SavedToDo
+                        toDo={x}
+                        key={i}
+                        handleChange={handleChange}
+                        deleteButton={() => deleteButton(x, i)}
+                        editSaveButton={() => editSaveButton(x, i)}
+                    // editButton={editButton}
+                    // edit={edit}
+                    />) : null}
             </div>
         }
 
@@ -83,5 +88,8 @@ ToDo 4 ToDo:
 - Press enter to save.
 - Reapply focus on edit button press.
 - Bugg: All edit windows opens when pressing edit - try to get only one to open.
-- Bugg: Edit button moves edited to last in the array.
+
+To start the server:
+npx browser-sync start --server --files "./*.html" --no-open --no-notify --directory
+
 -->
