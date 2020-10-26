@@ -45,9 +45,8 @@
                 input.current = e.target.value
             }
 
-            const saveButton = () => {
+            const addButton = () => {
                 setToDo(toDo.concat(input.current))
-                input.current = ''
             }
 
             const deleteButton = (a, index) => {
@@ -61,13 +60,15 @@
             const consoleButton = () => {
                 console.log(toDo)
                 console.log(toDo.length)
+                console.log(input.current)
             }
 
             return <div>
-                <button onClick={consoleButton}>Console Todo Checker</button>
+                <button onClick={consoleButton}>Console Checker</button>
+
                 <h1>To Be Done :</h1>
                 <input onChange={handleChange} type="text" placeholder='To do ...' />
-                <button onClick={saveButton}>Save</button>
+                <button onClick={addButton}>Add</button>
                 {toDo.length > 0 ? toDo.map((x, i, a) =>
                     <SavedToDo
                         toDo={x}
@@ -88,6 +89,8 @@
 <!-- 
 
 ToDo 4 ToDo:
+- Change UseRef for a state?
+- Be able to press save several times to add same written to do.
 - Press enter to save.
 - Reapply focus on edit button press.
 - Add check boxes.
