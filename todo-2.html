@@ -8,18 +8,17 @@
         function SavedToDo({ toDo, deleteButton, editSaveButton, handleChange, index }) {
             const [edit, setEdit] = React.useState(false)
 
-
             const editButton = () => {
-                setEdit(!edit)
+                setEdit(true)
             }
 
             const editSaveButton2 = () => {
                 editSaveButton()
-                setEdit(!edit)
+                setEdit(false)
             }
 
             const editDeleteButton = () => {
-                setEdit(!edit)
+                setEdit(false)
                 deleteButton()
             }
 
@@ -40,9 +39,7 @@
 
         function App() {
             const [toDo, setToDo] = React.useState([])
-            const [input2, setInput2] = React.useState()
             const input = React.useRef();
-            const [edit, setEdit] = React.useState(false)
 
             const handleChange = (e) => {
                 input.current = e.target.value
@@ -55,18 +52,10 @@
 
             const deleteButton = (a, index) => {
                 setToDo(toDo.filter((x, i) => index != i))
-                setEdit(!edit)
             }
 
             const editSaveButton = (a, index) => {
                 setToDo(toDo.map((x, i, array) => i === index ? array[index] = input.current : x))
-                // setToDo(toDo.filter((x, i, array) => array[index] = input.current))
-                setEdit(!edit)
-            }
-
-            const editButton = (a, index, array) => {
-                // setEdit(<input type='text' onChange={handleChange} ></input>)
-                setEdit(!edit)
             }
 
             const consoleButton = () => {
@@ -87,8 +76,6 @@
                         handleChange={handleChange}
                         deleteButton={() => deleteButton(x, i)}
                         editSaveButton={() => editSaveButton(x, i)}
-                    // editButton={() => editButton(x, i)}
-                    // edit={edit}
                     />) : null}
             </div>
         }
@@ -103,6 +90,9 @@
 ToDo 4 ToDo:
 - Press enter to save.
 - Reapply focus on edit button press.
+- Add check boxes.
+- Move to the bottom when checked.
+- Make a line over the word when checked.
 
 To start the server:
 npx browser-sync start --server --files "./*.html" --no-open --no-notify --directory
