@@ -5,22 +5,35 @@
     <script src="https://unpkg.com/@babel/standalone@7.8.3/babel.js"></script>
     <script type='text/babel'>
 
+        function SavedToDo({ toDo, deleteButton, editSaveButton, handleChange, index }) {
+            const [edit, setEdit] = React.useState(false)
 
-        function SavedToDo({ toDo, deleteButton, editSaveButton, handleChange }) {
-            const [edit2, setEdit2] = React.useState(null)
 
+            const editButton = () => {
+                setEdit(!edit)
+            }
 
-            const editButton2 = () => {
-                setEdit2(<input type='text' onChange={handleChange} ></input>)
+            const testButton = () => {
+                editSaveButton()
+                setEdit(!edit)
+            }
+
+            const testButton2 = () => {
+                deleteButton()
+                setEdit(!edit)
             }
 
             return (
-                <div className='todo'>
+                <div className={index + ' ToDo'}>
                     <h2 >{toDo}</h2>
-                    {edit2}
-                    <button onClick={deleteButton}>Delete</button>
-                    <button onClick={editButton2}>Edit</button>
-                    <button onClick={editSaveButton}>Save</button>
+                    {edit ?
+                        <>
+                            <input type='text' onChange={handleChange} defaultValue={toDo} />
+                            <button onClick={testButton}>Save</button>
+                        </>
+                        : <button onClick={editButton}>Edit</button>}
+                    <button onClick={testButton2}>Delete</button>
+
                 </div>
             )
         }
@@ -28,8 +41,8 @@
         function App() {
             const [toDo, setToDo] = React.useState([])
             const [input2, setInput2] = React.useState()
-            // const [edit, setEdit] = React.useState(null)
             const input = React.useRef();
+            const [edit, setEdit] = React.useState(false)
 
             const handleChange = (e) => {
                 input.current = e.target.value
@@ -42,15 +55,18 @@
 
             const deleteButton = (a, index) => {
                 setToDo(toDo.filter((x, i) => index != i))
+                setEdit(!edit)
             }
-
-            // const editButton = () => {
-            //     setEdit(<input type='text' onChange={handleChange} ></input>)
-            // }
 
             const editSaveButton = (a, index) => {
                 setToDo(toDo.map((x, i, array) => i === index ? array[index] = input.current : x))
                 // setToDo(toDo.filter((x, i, array) => array[index] = input.current))
+                setEdit(!edit)
+            }
+
+            const editButton = (a, index, array) => {
+                // setEdit(<input type='text' onChange={handleChange} ></input>)
+                setEdit(!edit)
             }
 
             const consoleButton = () => {
@@ -60,17 +76,18 @@
 
             return <div>
                 <button onClick={consoleButton}>Console Todo Checker</button>
-                <h1>Your To Do's :</h1>
-                <input onChange={handleChange} type="text"></input>
+                <h1>To Be Done :</h1>
+                <input onChange={handleChange} type="text" placeholder='To do ...' />
                 <button onClick={saveButton}>Save</button>
                 {toDo.length > 0 ? toDo.map((x, i, a) =>
                     <SavedToDo
                         toDo={x}
                         key={i}
+                        index={i}
                         handleChange={handleChange}
                         deleteButton={() => deleteButton(x, i)}
                         editSaveButton={() => editSaveButton(x, i)}
-                    // editButton={editButton}
+                    // editButton={() => editButton(x, i)}
                     // edit={edit}
                     />) : null}
             </div>
