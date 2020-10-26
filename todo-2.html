@@ -13,14 +13,14 @@
                 setEdit(!edit)
             }
 
-            const testButton = () => {
+            const editSaveButton2 = () => {
                 editSaveButton()
                 setEdit(!edit)
             }
 
-            const testButton2 = () => {
-                deleteButton()
+            const editDeleteButton = () => {
                 setEdit(!edit)
+                deleteButton()
             }
 
             return (
@@ -29,10 +29,10 @@
                     {edit ?
                         <>
                             <input type='text' onChange={handleChange} defaultValue={toDo} />
-                            <button onClick={testButton}>Save</button>
+                            <button onClick={editSaveButton2}>Save</button>
                         </>
                         : <button onClick={editButton}>Edit</button>}
-                    <button onClick={testButton2}>Delete</button>
+                    <button onClick={editDeleteButton}>Delete</button>
 
                 </div>
             )
@@ -101,10 +101,8 @@
 <!-- 
 
 ToDo 4 ToDo:
-- After pressing edit, input field must hold the todo value. Setting a preset value does not work as it seems to be inmutable. How to solve?
 - Press enter to save.
 - Reapply focus on edit button press.
-- Bugg: All edit windows opens when pressing edit - try to get only one to open.
 
 To start the server:
 npx browser-sync start --server --files "./*.html" --no-open --no-notify --directory
