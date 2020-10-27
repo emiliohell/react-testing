@@ -3,10 +3,30 @@
     <script src="https://unpkg.com/react@16.12.0/umd/react.development.js"></script>
     <script src="https://unpkg.com/react-dom@16.12.0/umd/react-dom.development.js"></script>
     <script src="https://unpkg.com/@babel/standalone@7.8.3/babel.js"></script>
+    <style>
+        todo>h1,
+        h2 {
+            display: inline;
+            padding-left: 10px;
+            margin-right: 10px;
+        }
+
+        .todo {
+            margin: 15px;
+            padding: 5px;
+            border: 2px solid red;
+            max-width: 500px;
+        }
+    </style>
     <script type='text/babel'>
 
-        function SavedToDo({ toDo, deleteButton, editSaveButton, handleChange, index }) {
+        function SavedToDo({ toDo, deleteButton, editSaveButton, handleChange, done, doneButton, children }) {
             const [edit, setEdit] = React.useState(false)
+            const refCheck = React.useRef()
+
+            React.useEffect(() => {
+                done === false ? refCheck.current.checked = false : refCheck.current.checked = true;
+            }, [done])
 
             const editButton = () => {
                 setEdit(true)
@@ -22,9 +42,19 @@
                 deleteButton()
             }
 
+            const test = () => {
+                doneButton()
+            }
+
             return (
-                <div className={index + ' ToDo'}>
-                    <h2 >{toDo}</h2>
+                <div className='todo'>
+                    {children}
+                    <input type="checkbox" onClick={test} ref={refCheck} />
+                    <h2 style={
+                        done ?
+                            { textDecoration: 'line-through', color: 'grey' }
+                            : { textDecoration: 'none', color: 'black' }
+                    } >{toDo}</h2>
                     {edit ?
                         <>
                             <input type='text' onChange={handleChange} defaultValue={toDo} />
@@ -46,7 +76,7 @@
             }
 
             const addButton = () => {
-                setToDo(toDo.concat(input.current))
+                setToDo(toDo.concat({ todo: input.current, done: false }))
             }
 
             const deleteButton = (a, index) => {
@@ -54,7 +84,17 @@
             }
 
             const editSaveButton = (a, index) => {
-                setToDo(toDo.map((x, i, array) => i === index ? array[index] = input.current : x))
+                setToDo(toDo.map(({ todo, done }, i) =>
+                    i === index ?
+                        { todo: input.current, done: done } :
+                        { todo: todo, done: done }))
+            }
+
+            const doneToDo = (a, index) => {
+                setToDo(toDo.map(({ todo, done }, i) =>
+                    i === index ?
+                        { todo: todo, done: !done } :
+                        { todo: todo, done: done }))
             }
 
             const consoleButton = () => {
@@ -69,15 +109,40 @@
                 <h1>To Be Done :</h1>
                 <input onChange={handleChange} type="text" placeholder='To do ...' />
                 <button onClick={addButton}>Add</button>
-                {toDo.length > 0 ? toDo.map((x, i, a) =>
-                    <SavedToDo
-                        toDo={x}
-                        key={i}
-                        index={i}
-                        handleChange={handleChange}
-                        deleteButton={() => deleteButton(x, i)}
-                        editSaveButton={() => editSaveButton(x, i)}
-                    />) : null}
+
+                {toDo.length > 0 ? toDo.map(({ todo, done }, i, a) =>
+
+                    done === false ?
+
+                        <SavedToDo
+
+                            toDo={todo}
+                            key={i}
+                            handleChange={handleChange}
+                            deleteButton={() => deleteButton(todo, i)}
+                            editSaveButton={() => editSaveButton(todo, i)}
+                            done={done}
+                            doneButton={() => doneToDo(done, i)}
+
+                        /> : null) : null}
+                <div>
+                    {toDo.length > 0 ? toDo.map(({ todo, done }, i, a) =>
+
+                        done === false ?
+
+                            null : <SavedToDo
+
+                                toDo={todo}
+                                key={i}
+                                handleChange={handleChange}
+                                deleteButton={() => deleteButton(todo, i)}
+                                editSaveButton={() => editSaveButton(todo, i)}
+                                done={done}
+                                doneButton={() => doneToDo(done, i)}
+
+                            />) : null}
+                </div>
+
             </div>
         }
 
@@ -89,13 +154,21 @@
 <!-- 
 
 ToDo 4 ToDo:
+- Exchange ToDo for Input Field
 - Change UseRef for a state?
-- Be able to press save several times to add same written to do.
 - Press enter to save.
 - Reapply focus on edit button press.
-- Add check boxes.
 - Move to the bottom when checked.
-- Make a line over the word when checked.
+
+- Plural format ...
+
+handlesave...
+
+boolean... 
+isedeting.
+
+todos
+
 
 To start the server:
 npx browser-sync start --server --files "./*.html" --no-open --no-notify --directory
