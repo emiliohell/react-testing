@@ -76,7 +76,7 @@
             }
 
             const addButton = () => {
-                setToDo(toDo.concat({ todo: input.current, done: false }))
+                setToDo(toDo.concat({ todo: input.current, done: false, time: new Date().getTime() }))
             }
 
             const deleteButton = (a, index) => {
@@ -91,10 +91,10 @@
             }
 
             const doneToDo = (a, index) => {
-                setToDo(toDo.map(({ todo, done }, i) =>
+                setToDo(toDo.map(({ todo, done, time }, i) =>
                     i === index ?
-                        { todo: todo, done: !done } :
-                        { todo: todo, done: done }))
+                        { todo: todo, done: !done, time: time, timeDone: new Date().getTime() } :
+                        { todo: todo, done: done, time: time }))
             }
 
             const consoleButton = () => {
@@ -103,14 +103,21 @@
                 console.log(input.current)
             }
 
+            React.useEffect(() => {
+                [...toDo].sort(({ time }) => time > 0)
+                console.log([...toDo].sort(({ time }) => time > 0))
+            }, [toDo])
+
+            const doneOrder = () => {
+            }
+
             return <div>
                 <button onClick={consoleButton}>Console Checker</button>
-
                 <h1>To Be Done :</h1>
                 <input onChange={handleChange} type="text" placeholder='To do ...' />
                 <button onClick={addButton}>Add</button>
 
-                {toDo.length > 0 ? toDo.map(({ todo, done }, i, a) =>
+                {toDo.length > 0 ? [...toDo].sort(({ time }) => time > 0).map(({ todo, done }, i, a) =>
 
                     done === false ?
 
@@ -126,11 +133,11 @@
 
                         /> : null) : null}
                 <div>
-                    {toDo.length > 0 ? toDo.map(({ todo, done }, i, a) =>
+                    {toDo.length > 0 ? [...toDo].sort(({ timeDone }) => timeDone > 0).map(({ todo, done }, i, a) =>
 
-                        done === false ?
+                        done === true ?
 
-                            null : <SavedToDo
+                            <SavedToDo
 
                                 toDo={todo}
                                 key={i}
@@ -140,7 +147,7 @@
                                 done={done}
                                 doneButton={() => doneToDo(done, i)}
 
-                            />) : null}
+                            /> : null) : null}
                 </div>
 
             </div>
@@ -158,7 +165,6 @@ ToDo 4 ToDo:
 - Change UseRef for a state?
 - Press enter to save.
 - Reapply focus on edit button press.
-- Move to the bottom when checked.
 
 - Plural format ...
 
